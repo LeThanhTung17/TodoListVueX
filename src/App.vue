@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <Button type="primary" :loading="false" title="Detail" />
-    <Button type="success" :loading="false" title="Success" />
-    <Button type="danger" :loading="true" title="Delete" />
+    <TodoForm />
   </div>
 </template>
 
 <script>
-import Button from './components/Button/index.vue';
+import TodoForm from './components/TodoForm';
+
 export default {
   name: 'App',
-  components: { Button }
+  components: { TodoForm },
+  data() {}
 };
 </script>
 
