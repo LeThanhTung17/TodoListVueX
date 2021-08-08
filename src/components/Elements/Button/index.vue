@@ -1,7 +1,12 @@
 <template>
   <button
-    :class="{ [getColor(type)]: true, [getSize(size)]: true }"
-    :disabled="loading"
+    :class="{
+      [getColor(type)]: true,
+      [getSize(size)]: true,
+      ['disabled']: loading || disabled
+    }"
+    :disabled="loading || disabled"
+    @click="onClick"
   >
     <div v-if="loading" class="spin"><Loading /></div>
     {{ title }}
@@ -21,7 +26,9 @@ export default {
     loading: Boolean,
     type: String,
     size: String,
-    title: String
+    title: String,
+    disabled: Boolean,
+    onClick: Function
   },
   data() {
     const getColor = type => {
@@ -36,6 +43,7 @@ export default {
           return 'bgPrimary';
       }
     };
+
     const getSize = size => {
       switch (size) {
         case ButtonSize.large:
@@ -68,6 +76,10 @@ button {
   cursor: pointer;
   font-size: 16px;
 }
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
 .spin {
   margin-right: 5px;
 }
@@ -81,7 +93,7 @@ button {
   background-color: #f44336;
 }
 .sizeLarge {
-  padding: 15px 30px;
+  padding: 10px 40px;
 }
 .sizeFull {
   width: 100%;

@@ -18,8 +18,9 @@ export default {
     currentValue: String
   },
   data() {
-    const onInputChange = event =>
+    const onInputChange = event => {
       this.$emit('current-input', event.target.value);
+    };
 
     return {
       onInputChange

@@ -1,33 +1,37 @@
 <template>
   <div class="addLayout">
-    <h2>New Task</h2>
     <form @submit.prevent="submit">
       <Input
         @current-input="getCurrentTitle"
-        :currentValue="defaultTask.title"
+        :currentValue="currentValue.title"
       />
       <p>Description</p>
       <TextArea
         @current-textarea="getCurrentDesc"
-        :currentValue="defaultTask.description"
+        :currentValue="currentValue.description"
       />
-      <div>
-        <div class="date">
+      <div class="row">
+        <div class="datepicker">
           <DatePicker
             @current-date="getCurrentDate"
-            :currentValue="defaultTask.date"
+            :currentValue="currentValue.date"
           />
         </div>
         <div class="piority">
           <Select
             :options="Piority"
             :selected="OptionValues.normal"
-            :currentValue="defaultTask.piority"
+            :currentValue="currentValue.piority"
             @current-select="getCurrentPiority"
           />
         </div>
       </div>
-      <Button :type="ButtonType.success" :size="ButtonSize.full" title="Add" />
+      <Button
+        :type="ButtonType.success"
+        :size="ButtonSize.full"
+        :title="isUpdate ? 'Update' : 'Add'"
+        :onClick="() => {}"
+      />
     </form>
   </div>
 </template>
@@ -39,17 +43,24 @@ import Input from '../Elements/Input';
 import TextArea from '../Elements/TextArea';
 import DatePicker from '../Elements/DatePicker';
 import { ButtonType, ButtonSize, OptionValues } from '../../enums';
+import { getCurrentDateTime } from '../../helpers';
 
 export default {
   name: 'TodoForm',
   components: { Button, Select, Input, TextArea, DatePicker },
+  props: { isUpdate: Boolean, valueTodo: Object },
   data() {
     const defaultTask = {
-      date: '',
+      date: getCurrentDateTime(),
       title: 'okoko',
       piority: 1,
       description: 'kaka'
     };
+
+    const currentValue = this.$props.isUpdate
+      ? this.$props.valueTodo
+      : defaultTask;
+
     const Piority = [
       {
         id: OptionValues.low,
@@ -65,18 +76,18 @@ export default {
       }
     ];
 
-    const getCurrentDate = value => (defaultTask.date = value);
-    const getCurrentTitle = value => (defaultTask.title = value);
-    const getCurrentDesc = value => (defaultTask.description = value);
-    const getCurrentPiority = value => (defaultTask.piority = value);
+    const getCurrentDate = value => (currentValue.date = value);
+    const getCurrentTitle = value => (currentValue.title = value);
+    const getCurrentDesc = value => (currentValue.description = value);
+    const getCurrentPiority = value => (currentValue.piority = value);
 
-    const submit = () => console.log(defaultTask.title);
+    const submit = () => console.log('submit');
     return {
       ButtonType,
       ButtonSize,
       OptionValues,
       Piority,
-      defaultTask,
+      currentValue,
       getCurrentDate,
       getCurrentTitle,
       getCurrentDesc,
@@ -88,4 +99,15 @@ export default {
 </script>
 
 <style>
+.addLayout {
+  width: 100%;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+p {
+  text-align: left;
+  margin-bottom: 0px;
+}
 </style>

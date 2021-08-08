@@ -1,16 +1,17 @@
 <template>
   <div id="app">
     <TodoForm />
+    <TodoList />
   </div>
 </template>
 
 <script>
 import TodoForm from './components/TodoForm';
+import TodoList from './components/TodoList';
 
 export default {
   name: 'App',
-  components: { TodoForm },
-  data() {}
+  components: { TodoForm, TodoList }
 };
 </script>
 

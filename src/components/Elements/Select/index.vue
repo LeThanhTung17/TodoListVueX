@@ -19,8 +19,9 @@ export default {
     selected: Number
   },
   data() {
-    const onSelectChange = event =>
+    const onSelectChange = event => {
       this.$emit('current-select', event.target.value);
+    };
     return {
       onSelectChange
     };
@@ -31,7 +32,6 @@ export default {
 <style>
 select {
   width: 200px;
-  margin: 15px 0;
   padding: 5px;
   border-radius: 5px;
   outline: none;
