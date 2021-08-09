@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { v4 as uuid } from 'uuid';
+import axios from 'axios';
 import Button from '../Elements/Button';
 import Select from '../Elements/Select';
 import Input from '../Elements/Input';
@@ -41,7 +41,7 @@ export default {
   components: { Button, Select, Input, TextArea, DatePicker },
   props: { isUpdate: Boolean, valueTodo: Object },
   methods: {
-    ...mapActions(['addTodo', 'updateTodo']),
+    ...mapActions(['ADD_TODO', 'UPDATE_TODO']),
     resetForm() {
       this.currentValue = {
         date: this.getCurrentDateTime(),
@@ -51,21 +51,37 @@ export default {
         completed: false
       };
     },
-    onSubmit() {
+    async onSubmit() {
       this.loading = true;
       if (this.isUpdate) {
-        this.$store.dispatch('UPDATE_TODO', this.currentValue);
-        alert('Updated!');
+        try {
+          const res = await axios.put(
+            `https://jsonplaceholder.typicode.com/todos/${this.currentValue.id}`,
+            this.currentValue
+          );
+          this.UPDATE_TODO(res.data);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.loading = false;
+        }
       } else {
-        this.$store.dispatch('ADD_TODO', {
-          ...this.currentValue,
-          id: uuid(),
-          completed: false
-        });
+        try {
+          const res = await axios.post(
+            'https://jsonplaceholder.typicode.com/todos',
+            {
+              ...this.currentValue,
+              completed: false
+            }
+          );
+          this.ADD_TODO(res.data);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.loading = false;
+        }
         this.resetForm();
-        alert('Created!');
       }
-      this.loading = false;
     }
   },
   data() {

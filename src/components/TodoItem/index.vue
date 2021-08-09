@@ -8,7 +8,9 @@
           :checked="todo.completed"
           @change="changeStatusComplete(todo.id)"
         />
-        <p class="titleItem">{{ todo.title }}</p>
+        <p class="titleItem" :title="todo.title">
+          {{ todo.title.slice(0, 10) }}
+        </p>
       </div>
       <div class="todoRight">
         <div class="btnPrimary">
@@ -40,9 +42,9 @@ export default {
   components: { Button, TodoForm },
   props: { todo: Object },
   methods: {
-    ...mapActions(['deleteTodo']),
+    ...mapActions(['DELETE_TODO']),
     handleRemove() {
-      this.$store.dispatch('DELETE_TODO', this.todo.id);
+      this.DELETE_TODO(this.todo.id);
     },
     changeStatusComplete(id) {
       this.$store.commit('changeStatus', id);

@@ -15,7 +15,8 @@
 import TodoItem from '../TodoItem';
 import Search from '../Search';
 import BulkActions from '../BulkActions';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
   name: 'TodoList',
@@ -23,6 +24,19 @@ export default {
   computed: {
     ...mapState(['todos', 'todosSearch']),
     ...mapGetters(['isBulkActions', 'listTodo'])
+  },
+  methods: {
+    ...mapActions(['GET_TODOS'])
+  },
+  async created() {
+    try {
+      const res = await axios.get(
+        'https://jsonplaceholder.typicode.com/todos?_limit=3'
+      );
+      this.GET_TODOS(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 </script>

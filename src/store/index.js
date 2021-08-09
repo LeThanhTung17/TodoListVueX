@@ -1,38 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { v4 as uuid } from 'uuid';
+import { getCurrentDateTime } from '../helpers';
 
 Vue.use(Vuex);
 
 const storeData = {
   state: {
-    todos: [
-      {
-        id: uuid(),
-        title: 'okok',
-        date: new Date().toISOString().slice(0, 10),
-        piority: 2,
-        description: '',
-        completed: false
-      },
-      {
-        id: uuid(),
-        title: 'okok1',
-        date: new Date('08/30/2021').toISOString().slice(0, 10),
-        piority: 0,
-        description: 'hehe',
-        completed: false
-      },
-      {
-        id: uuid(),
-        title: 'okok2',
-        date: new Date('09/04/2021').toISOString().slice(0, 10),
-        piority: 1,
-        description: 'huhuhu',
-        completed: false
-      }
-    ].sort((a, b) => new Date(a.date) - new Date(b.date)),
-    todosSearch: []
+    todos: [],
+    todosSearch: [],
+    loading: false
   },
   getters: {
     isBulkActions: state => state.todos.some(todo => todo.completed),
@@ -42,8 +18,6 @@ const storeData = {
     },
     listIdChecked: state =>
       state.todos.filter(el => el.completed).map(el => el.id)
-    // listTodo: state =>
-    //   state.todosSearch.length !== 0 ? state.todosSearch : state.todos
   },
   mutations: {
     changeAllStatus(state) {
@@ -57,6 +31,18 @@ const storeData = {
         if (el.id === id) el.completed = !el.completed;
         return el;
       });
+    },
+    setTodos(state, todos) {
+      state.todos = todos
+        .map(el => ({
+          title: el.title,
+          date: getCurrentDateTime(),
+          id: el.id,
+          piority: 1,
+          description: '',
+          completed: el.completed
+        }))
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
     },
     addTodo(state, newTodo) {
       state.todos.push(newTodo);
@@ -94,6 +80,9 @@ const storeData = {
     },
     DELETE_TODOS({ commit }, listId) {
       commit('deleteTodos', listId);
+    },
+    GET_TODOS({ commit }, todos) {
+      commit('setTodos', todos);
     }
   }
 };
