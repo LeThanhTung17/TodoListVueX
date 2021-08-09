@@ -1,29 +1,17 @@
 <template>
   <div class="addLayout">
-    <form @submit.prevent="submit">
-      <Input
-        @current-input="getCurrentTitle"
-        :currentValue="currentValue.title"
-      />
+    <form @submit.prevent="onSubmit">
+      <Input v-model="currentValue.title" :required="true" />
       <p>Description</p>
-      <TextArea
-        @current-textarea="getCurrentDesc"
-        :currentValue="currentValue.description"
-      />
+      <TextArea v-model="currentValue.description" />
       <div class="row">
         <div class="datepicker">
-          <DatePicker
-            @current-date="getCurrentDate"
-            :currentValue="currentValue.date"
-          />
+          <p>Due Date</p>
+          <DatePicker v-model="currentValue.date" />
         </div>
         <div class="piority">
-          <Select
-            :options="Piority"
-            :selected="OptionValues.normal"
-            :currentValue="currentValue.piority"
-            @current-select="getCurrentPiority"
-          />
+          <p>Piority</p>
+          <Select :options="Piority" v-model="currentValue.piority" />
         </div>
       </div>
       <Button
@@ -31,12 +19,14 @@
         :size="ButtonSize.full"
         :title="isUpdate ? 'Update' : 'Add'"
         :onClick="() => {}"
+        :loading="loading"
       />
     </form>
   </div>
 </template>
 
 <script>
+import { v4 as uuid } from 'uuid';
 import Button from '../Elements/Button';
 import Select from '../Elements/Select';
 import Input from '../Elements/Input';
@@ -44,18 +34,49 @@ import TextArea from '../Elements/TextArea';
 import DatePicker from '../Elements/DatePicker';
 import { ButtonType, ButtonSize, OptionValues } from '../../enums';
 import { getCurrentDateTime } from '../../helpers';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'TodoForm',
   components: { Button, Select, Input, TextArea, DatePicker },
   props: { isUpdate: Boolean, valueTodo: Object },
+  methods: {
+    ...mapActions(['addTodo', 'updateTodo']),
+    resetForm() {
+      this.currentValue = {
+        date: this.getCurrentDateTime(),
+        title: '',
+        piority: 1,
+        description: '',
+        completed: false
+      };
+    },
+    onSubmit() {
+      this.loading = true;
+      if (this.isUpdate) {
+        this.$store.dispatch('UPDATE_TODO', this.currentValue);
+        alert('Updated!');
+      } else {
+        this.$store.dispatch('ADD_TODO', {
+          ...this.currentValue,
+          id: uuid(),
+          completed: false
+        });
+        this.resetForm();
+        alert('Created!');
+      }
+      this.loading = false;
+    }
+  },
   data() {
     const defaultTask = {
       date: getCurrentDateTime(),
-      title: 'okoko',
+      title: '',
       piority: 1,
-      description: 'kaka'
+      description: ''
     };
+
+    let loading = false;
 
     const currentValue = this.$props.isUpdate
       ? this.$props.valueTodo
@@ -76,23 +97,14 @@ export default {
       }
     ];
 
-    const getCurrentDate = value => (currentValue.date = value);
-    const getCurrentTitle = value => (currentValue.title = value);
-    const getCurrentDesc = value => (currentValue.description = value);
-    const getCurrentPiority = value => (currentValue.piority = value);
-
-    const submit = () => console.log('submit');
     return {
       ButtonType,
       ButtonSize,
       OptionValues,
       Piority,
       currentValue,
-      getCurrentDate,
-      getCurrentTitle,
-      getCurrentDesc,
-      getCurrentPiority,
-      submit
+      loading,
+      getCurrentDateTime
     };
   }
 };

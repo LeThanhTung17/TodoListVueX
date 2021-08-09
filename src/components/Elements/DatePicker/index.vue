@@ -3,8 +3,8 @@
     type="date"
     class="date"
     :min="getCurrentDateTime()"
-    v-model="currentDate"
-    @change="onDateChange"
+    :value="value"
+    @input="$emit('input', $event.target.value)"
   />
 </template>
 
@@ -13,20 +13,9 @@ import { getCurrentDateTime } from '../../../helpers';
 
 export default {
   name: 'DatePicker',
-  props: { currentValue: String },
+  props: { value: String },
   data() {
-    const currentDate =
-      this.$props.currentValue.length !== 0
-        ? this.$props.currentValue
-        : getCurrentDateTime();
-
-    const onDateChange = event => {
-      this.$emit('current-date', event.target.value);
-    };
-
     return {
-      onDateChange,
-      currentDate,
       getCurrentDateTime
     };
   }

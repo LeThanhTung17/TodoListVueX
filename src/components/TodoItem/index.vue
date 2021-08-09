@@ -18,7 +18,7 @@
           <Button
             :type="ButtonType.danger"
             title="Remove"
-            :onClick="() => {}"
+            :onClick="handleRemove"
           />
         </div>
       </div>
@@ -33,12 +33,17 @@
 import Button from '../Elements/Button';
 import TodoForm from '../TodoForm';
 import { ButtonType } from '../../enums';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'TodoItem',
   components: { Button, TodoForm },
   props: { todo: Object },
   methods: {
+    ...mapActions(['deleteTodo']),
+    handleRemove() {
+      this.$store.dispatch('DELETE_TODO', this.todo.id);
+    },
     changeStatusComplete(id) {
       this.$store.commit('changeStatus', id);
     },

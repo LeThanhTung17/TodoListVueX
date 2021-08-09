@@ -2,10 +2,11 @@
   <div class="inputBox">
     <input
       type="text"
+      :required="required"
       :placeholder="!!type ? 'Search...' : 'Add new task...'"
       class="input"
-      @change="onInputChange"
-      v-model="currentValue"
+      @input="$emit('input', $event.target.value)"
+      :value="value"
     />
   </div>
 </template>
@@ -15,16 +16,8 @@ export default {
   name: 'Input',
   props: {
     type: String,
-    currentValue: String
-  },
-  data() {
-    const onInputChange = event => {
-      this.$emit('current-input', event.target.value);
-    };
-
-    return {
-      onInputChange
-    };
+    value: String,
+    required: Boolean
   }
 };
 </script>

@@ -1,11 +1,6 @@
 <template>
-  <select @change="onSelectChange">
-    <option
-      v-for="option in options"
-      :key="option.id"
-      :value="option.id"
-      :selected="selected === option.id ? true : false"
-    >
+  <select :value="value" @input="$emit('input', Number($event.target.value))">
+    <option v-for="option in options" :key="option.id" :value="option.id">
       {{ option.title }}
     </option>
   </select>
@@ -16,15 +11,7 @@ export default {
   name: 'Select',
   props: {
     options: Array,
-    selected: Number
-  },
-  data() {
-    const onSelectChange = event => {
-      this.$emit('current-select', event.target.value);
-    };
-    return {
-      onSelectChange
-    };
+    value: Number
   }
 };
 </script>

@@ -14,7 +14,7 @@
         <Button
           :type="ButtonType.danger"
           title="Remove"
-          :onClick="() => {}"
+          :onClick="removeAllTodo"
           :size="ButtonSize.large"
         />
       </div>
@@ -25,13 +25,19 @@
 <script>
 import Button from '../Elements/Button';
 import { ButtonType, ButtonSize } from '../../enums';
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations, mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'BulkActions',
   components: { Button },
-  computed: { ...mapGetters(['isCheckedAll']) },
-  methods: { ...mapMutations(['changeAllStatus']) },
+  computed: { ...mapGetters(['isCheckedAll', 'listIdChecked']) },
+  methods: {
+    ...mapMutations(['changeAllStatus']),
+    ...mapActions(['deleteTodos']),
+    removeAllTodo() {
+      this.$store.dispatch('DELETE_TODOS', this.listIdChecked);
+    }
+  },
   data() {
     return { ButtonType, ButtonSize };
   }
@@ -40,16 +46,12 @@ export default {
 
 <style>
 .bulkActions {
-  /* position: absolute; */
-  bottom: -100px;
-  right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px 10px 0;
   padding: 0 10px;
-  border: 1px solid;
-  /* width: 100%; */
+  border-top: 1px solid;
+  background-color: rgb(190, 190, 190);
 }
 .todoRight {
   display: flex;

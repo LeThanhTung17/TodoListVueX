@@ -1,7 +1,12 @@
 <template>
   <div id="app">
-    <TodoForm />
-    <TodoList />
+    <div class="todoForm">
+      <h2>New Task</h2>
+      <TodoForm />
+    </div>
+    <div class="todos">
+      <TodoList />
+    </div>
   </div>
 </template>
 
@@ -23,5 +28,23 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  display: flex;
+  justify-content: center;
+}
+h2 {
+  margin-bottom: 30px;
+}
+.todoForm {
+  padding: 30px;
+  border: 1px solid;
+  width: 500px;
+}
+.todos {
+  padding: 20px;
+  border: 1px solid;
+  border-left: none;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 </style>
