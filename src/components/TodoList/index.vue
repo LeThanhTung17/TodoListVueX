@@ -15,19 +15,14 @@
 import TodoItem from '../TodoItem';
 import Search from '../Search';
 import BulkActions from '../BulkActions';
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 
 export default {
   name: 'TodoList',
   components: { TodoItem, BulkActions, Search },
-  computed: {
-    ...mapState(['todos', 'todosSearch']),
-    ...mapGetters(['isBulkActions', 'listTodo'])
-  },
-  methods: {
-    ...mapActions(['GET_TODOS'])
-  },
+  computed: mapGetters(['isBulkActions', 'todos']),
+  methods: mapActions(['GET_TODOS']),
   async created() {
     try {
       const res = await axios.get(
