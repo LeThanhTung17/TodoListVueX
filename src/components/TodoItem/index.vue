@@ -36,6 +36,7 @@ import Button from '../Elements/Button';
 import TodoForm from '../TodoForm';
 import { ButtonType } from '../../enums';
 import { mapActions } from 'vuex';
+import axios from 'axios';
 
 export default {
   name: 'TodoItem',
@@ -48,12 +49,23 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['DELETE_TODO']),
+    ...mapActions(['DELETE_TODO', 'UPDATE_STATUS']),
     handleRemove() {
       this.DELETE_TODO(this.todo.id);
     },
-    changeStatusComplete(id) {
+    async changeStatusComplete(id) {
       this.$store.commit('changeStatus', id);
+      try {
+        const res = await axios.put(
+          `https://jsonplaceholder.typicode.com/todos/${id}`,
+          { completed: !this.todo.completed }
+        );
+        this.UPDATE_STATUS(res.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.loading = false;
+      }
     },
     showDetail() {
       this.show = !this.show;

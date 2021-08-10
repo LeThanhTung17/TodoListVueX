@@ -96,9 +96,10 @@ export default {
             `https://jsonplaceholder.typicode.com/todos/${this.currentValue.id}`,
             this.currentValue
           );
-          console.log(res.data);
-          this.UPDATE_TODO(res.data);
-          this.$forceUpdate();
+          this.UPDATE_TODO({
+            ...res.data,
+            completed: this.currentValue.completed
+          });
         } catch (error) {
           console.log(error);
         } finally {

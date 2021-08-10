@@ -50,6 +50,13 @@ const todosModule = {
       let newList = [...state.todos];
       const index = newList.findIndex(el => el.id === newTodo.id);
       newList[index] = newTodo;
+      newList[index].completed = state.todos[index].completed;
+      state.todos = newList;
+    },
+    updateStatus(state, payload) {
+      let newList = [...state.todos];
+      const index = newList.findIndex(el => el.id === payload.id);
+      newList[index].completed = payload.completed;
       state.todos = newList;
     },
     deleteTodo(state, id) {
@@ -78,6 +85,9 @@ const todosModule = {
     },
     UPDATE_TODO({ commit }, todo) {
       commit('updateTodo', todo);
+    },
+    UPDATE_STATUS({ commit }, payload) {
+      commit('updateStatus', payload);
     },
     DELETE_TODO({ commit }, id) {
       commit('deleteTodo', id);
