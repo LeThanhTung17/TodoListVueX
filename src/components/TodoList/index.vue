@@ -3,7 +3,11 @@
     <h2>Todo List</h2>
     <Search />
     <div class="item">
-      <TodoItem v-for="todo in todosSearch" :key="todo.id" :todo="todo" />
+      <TodoItem
+        v-for="todo in [...todosSearch]"
+        :key="todo.id"
+        :todo="{ ...todo }"
+      />
     </div>
     <div class="bulk" v-if="isBulkActions">
       <BulkActions />
@@ -24,12 +28,6 @@ export default {
   computed: {
     ...mapGetters(['isBulkActions', 'todosSearch'])
   },
-  watch: {
-    getTodos(newTodo, oldTodo) {
-      console.log('aa', newTodo, oldTodo);
-    }
-  },
-  methods: mapActions(['GET_TODOS']),
   async created() {
     try {
       const res = await axios.get(
@@ -40,11 +38,7 @@ export default {
       console.log(error);
     }
   },
-  data() {
-    return {
-      todos: this.todosSearch
-    };
-  }
+  methods: mapActions(['GET_TODOS'])
 };
 </script>
 

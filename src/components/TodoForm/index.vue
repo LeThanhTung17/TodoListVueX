@@ -40,6 +40,43 @@ export default {
   name: 'TodoForm',
   components: { Button, Select, Input, TextArea, DatePicker },
   props: { isUpdate: Boolean, valueTodo: Object },
+  data() {
+    const defaultTask = {
+      date: getCurrentDateTime(),
+      title: '',
+      piority: 1,
+      description: ''
+    };
+
+    const currentValue = this.$props.isUpdate
+      ? this.$props.valueTodo
+      : defaultTask;
+
+    const Piority = [
+      {
+        id: OptionValues.low,
+        title: 'Low'
+      },
+      {
+        id: OptionValues.normal,
+        title: 'Normal'
+      },
+      {
+        id: OptionValues.high,
+        title: 'High'
+      }
+    ];
+
+    return {
+      ButtonType,
+      ButtonSize,
+      OptionValues,
+      Piority,
+      currentValue,
+      loading: false,
+      getCurrentDateTime
+    };
+  },
   methods: {
     ...mapActions(['ADD_TODO', 'UPDATE_TODO']),
     resetForm() {
@@ -85,45 +122,6 @@ export default {
         this.resetForm();
       }
     }
-  },
-  data() {
-    const defaultTask = {
-      date: getCurrentDateTime(),
-      title: '',
-      piority: 1,
-      description: ''
-    };
-
-    let loading = false;
-
-    const currentValue = this.$props.isUpdate
-      ? this.$props.valueTodo
-      : defaultTask;
-
-    const Piority = [
-      {
-        id: OptionValues.low,
-        title: 'Low'
-      },
-      {
-        id: OptionValues.normal,
-        title: 'Normal'
-      },
-      {
-        id: OptionValues.high,
-        title: 'High'
-      }
-    ];
-
-    return {
-      ButtonType,
-      ButtonSize,
-      OptionValues,
-      Piority,
-      currentValue,
-      loading,
-      getCurrentDateTime
-    };
   }
 };
 </script>

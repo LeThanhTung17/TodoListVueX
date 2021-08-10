@@ -47,8 +47,10 @@ const todosModule = {
       state.todos.sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     updateTodo(state, newTodo) {
-      const index = state.todos.findIndex(el => el.id === newTodo.id);
-      state.todos[index] = newTodo;
+      let newList = [...state.todos];
+      const index = newList.findIndex(el => el.id === newTodo.id);
+      newList[index] = newTodo;
+      state.todos = newList;
     },
     deleteTodo(state, id) {
       state.todos = state.todos.filter(el => el.id !== id);
@@ -62,7 +64,7 @@ const todosModule = {
         state.isSearch = false;
         state.todos;
       }
-      state.todosSearch = state.todos.filter(el => {
+      state.todosSearch = [...state.todos].filter(el => {
         return text
           .toLowerCase()
           .split(' ')

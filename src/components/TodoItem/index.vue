@@ -41,6 +41,12 @@ export default {
   name: 'TodoItem',
   components: { Button, TodoForm },
   props: { todo: Object },
+  data() {
+    return {
+      ButtonType,
+      show: false
+    };
+  },
   methods: {
     ...mapActions(['DELETE_TODO']),
     handleRemove() {
@@ -52,12 +58,6 @@ export default {
     showDetail() {
       this.show = !this.show;
     }
-  },
-  data() {
-    return {
-      ButtonType,
-      show: false
-    };
   }
 };
 </script>
