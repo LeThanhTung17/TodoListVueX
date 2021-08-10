@@ -9,7 +9,7 @@
           @change="changeStatusComplete(todo.id)"
         />
         <p class="titleItem" :title="todo.title">
-          {{ todo.title.slice(0, 10) }}
+          {{ todo.title }}
         </p>
       </div>
       <div class="todoRight">
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="updateItem" v-if="show">
-      <TodoForm :isUpdate="true" :valueTodo="todo" />
+      <TodoForm :isUpdate="true" :valueTodo="{ ...todo }" />
     </div>
   </div>
 </template>
@@ -54,11 +54,9 @@ export default {
     }
   },
   data() {
-    let show = false;
-
     return {
       ButtonType,
-      show
+      show: false
     };
   }
 };

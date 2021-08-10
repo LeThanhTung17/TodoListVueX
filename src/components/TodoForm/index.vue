@@ -59,7 +59,9 @@ export default {
             `https://jsonplaceholder.typicode.com/todos/${this.currentValue.id}`,
             this.currentValue
           );
+          console.log(res.data);
           this.UPDATE_TODO(res.data);
+          this.$forceUpdate();
         } catch (error) {
           console.log(error);
         } finally {

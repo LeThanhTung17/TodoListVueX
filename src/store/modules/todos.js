@@ -2,7 +2,9 @@ import { getCurrentDateTime } from '../../helpers';
 
 const todosModule = {
   state: {
-    todos: []
+    todos: [],
+    todosSearch: [],
+    isSearch: false
   },
   getters: {
     todos: state => state.todos,
@@ -12,7 +14,8 @@ const todosModule = {
       return count === state.todos.length;
     },
     listIdChecked: state =>
-      state.todos.filter(el => el.completed).map(el => el.id)
+      state.todos.filter(el => el.completed).map(el => el.id),
+    todosSearch: state => (state.isSearch ? state.todosSearch : state.todos)
   },
   mutations: {
     changeAllStatus(state) {
@@ -37,11 +40,11 @@ const todosModule = {
           description: '',
           completed: el.completed
         }))
-        .sort((a, b) => new Date(a.date) - new Date(b.date));
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     addTodo(state, newTodo) {
       state.todos.push(newTodo);
-      state.todos.sort((a, b) => new Date(a.date) - new Date(b.date));
+      state.todos.sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     updateTodo(state, newTodo) {
       const index = state.todos.findIndex(el => el.id === newTodo.id);
@@ -54,8 +57,12 @@ const todosModule = {
       state.todos = state.todos.filter(el => !listId.includes(el.id));
     },
     searchTodos(state, text) {
-      if (text.length === 0) state.todos;
-      state.todos = state.todos.filter(el => {
+      state.isSearch = true;
+      if (text.length === 0) {
+        state.isSearch = false;
+        state.todos;
+      }
+      state.todosSearch = state.todos.filter(el => {
         return text
           .toLowerCase()
           .split(' ')
